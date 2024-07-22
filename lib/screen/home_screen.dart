@@ -18,39 +18,60 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBar(),
-      body: Column(
-        children: [
-          const Expanded(
-            flex: 2,
-            child: GoogleMap(
-              initialCameraPosition: CameraPosition(
-                target: companyLatLng,
-                zoom: 16,
-              ),
-            ),
-          ),
-          Expanded(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.timelapse_outlined,
-                color: Colors.blue,
-                size: 50.0,
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {},
-                child: const Text(
-                  '출근하기 !',
-                  style: TextStyle(
-                    color: Colors.blue,
+      body: FutureBuilder<String>(
+        future: checkPermission(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data == '위치 권한이 허가 되었습니다.') {
+            return Column(
+              children: [
+                const Expanded(
+                  flex: 2,
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                      target: companyLatLng,
+                      zoom: 16,
+                    ),
                   ),
                 ),
-              )
-            ],
-          )),
-        ],
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.timelapse_outlined,
+                        color: Colors.blue,
+                        size: 50.0,
+                      ),
+                      const SizedBox(height: 20.0),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: const Text(
+                          '출근하기 !',
+                          style: TextStyle(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return Center(
+            child: Text(
+              snapshot.data.toString(),
+            ),
+          );
+        },
       ),
     );
   }
