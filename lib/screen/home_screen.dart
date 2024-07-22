@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:google_maps_flutter_web/google_maps_flutter_web.dart';
@@ -17,11 +18,39 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: renderAppBar(),
-      body: const GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: companyLatLng,
-          zoom: 16,
-        ),
+      body: Column(
+        children: [
+          const Expanded(
+            flex: 2,
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(
+                target: companyLatLng,
+                zoom: 16,
+              ),
+            ),
+          ),
+          Expanded(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.timelapse_outlined,
+                color: Colors.blue,
+                size: 50.0,
+              ),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: () {},
+                child: const Text(
+                  '출근하기 !',
+                  style: TextStyle(
+                    color: Colors.blue,
+                  ),
+                ),
+              )
+            ],
+          )),
+        ],
       ),
     );
   }
